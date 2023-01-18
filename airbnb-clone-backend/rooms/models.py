@@ -36,6 +36,13 @@ class Room(CommonModel):
     )
     amenities = models.ManyToManyField("rooms.Amenity")
 
+    category = models.ForeignKey(
+        "categories.Category",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+
     def __str__(self):
         return self.name
 
@@ -46,8 +53,8 @@ class Amenity(CommonModel):
     name = models.CharField(max_length=150)
     description = models.CharField(max_length=150, null=True, blank=True)
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         verbose_name_plural = "Amenities"
+
+    def __str__(self):
+        return self.name
