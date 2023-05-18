@@ -2,15 +2,15 @@
 name = "airbnb-clone-backend"
 version = "0.1.0"
 description = ""
-authors = ["nockda"]
+authors = ["Hyun Suk Lee"]
+readme = "README.md"
+packages = [{include = "airbnb_clone_backend"}]
 
 [tool.poetry.dependencies]
-python = "^3.10"
-Django = "^4.1.4"
-Pillow = "^9.4.0"
+python = "^3.11"
+django = "^4.2.1"
 
-[tool.poetry.dev-dependencies]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
