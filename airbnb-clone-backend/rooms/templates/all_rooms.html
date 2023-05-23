@@ -1,0 +1,12 @@
+<h1>{{title}}</h1>
+
+<ul>
+    {% for room in rooms%}
+    <li><a href="/rooms/{{room.pk}}">{{room.name}}<br />
+            {% for amenitiy in room.amenities.all %}
+            <span>-{{amenitiy.name}}<br /></span>
+            {%endfor%}
+    </li>
+    </a>
+    {%endfor%}
+</ul>
