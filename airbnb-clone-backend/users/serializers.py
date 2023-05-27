@@ -9,6 +9,7 @@ class TinyUserSerializer(ModelSerializer):
             "id",
             "username",
             "avatar",
+            "name",
         )
 
 

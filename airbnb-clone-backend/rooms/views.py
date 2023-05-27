@@ -1,3 +1,5 @@
+import time
+
 from django.db import transaction
 from django.utils import timezone
 from categories.models import Category
@@ -121,6 +123,7 @@ class RoomDetail(APIView):
             raise NotFound
 
     def get(self, request, pk):
+        time.sleep(1)
         rooms = self.get_object(pk)
         Serializer = RoomDetailSerializer(
             rooms,
