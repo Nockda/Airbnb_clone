@@ -12,11 +12,19 @@ import {
   ModalOverlay,
   VStack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { FaKey, FaUserAlt } from "react-icons/fa";
 import SocialLogin from "./SocialLogin";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  IUsernameLoginError,
+  IUsernameLoginSuccess,
+  IUsernameLoginVariable,
+  usernameLogin,
+} from "../api";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -29,8 +37,35 @@ interface IForm {
 }
 
 export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
-  const { register, handleSubmit, formState } = useForm<IForm>();
-  const onSubmit = (data: IForm) => {};
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<IForm>();
+  const toast = useToast();
+  const QueryClient = useQueryClient();
+  const mutation = useMutation<
+    IUsernameLoginSuccess,
+    IUsernameLoginError,
+    IUsernameLoginVariable
+  >(usernameLogin, {
+    onMutate: () => {
+      console.log("mutation starting");
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Welcome Back",
+        status: "success",
+      });
+      onClose();
+      reset();
+      QueryClient.refetchQueries(["me"]);
+    },
+  });
+  const onSubmit = ({ username, password }: IForm) => {
+    mutation.mutate({ username, password });
+  };
   return (
     <Modal motionPreset="slideInBottom" onClose={onClose} isOpen={isOpen}>
       <ModalOverlay />
@@ -71,7 +106,18 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
               />
             </InputGroup>
           </VStack>
-          <Button type="submit" mt={4} colorScheme="red" w={"100%"}>
+          {mutation.isError ? (
+            <Text color={"red.600"} fontSize={"sm"} textAlign={"center"}>
+              Username or password are wrong
+            </Text>
+          ) : null}
+          <Button
+            isLoading={mutation.isLoading}
+            type="submit"
+            mt={4}
+            colorScheme="red"
+            w={"100%"}
+          >
             Login
           </Button>
           <SocialLogin />

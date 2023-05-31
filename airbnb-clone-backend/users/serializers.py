@@ -27,3 +27,23 @@ class PrivateUserSerializer(ModelSerializer):
             "groups",
             "user_permissions",
         )
+
+
+class ManageBookingTinyUserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "name",
+            "phone_nb",
+        )
+
+
+class UserSignUpSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "name",
+            "phone_nb",
+            "email",
+            "username",
+        )

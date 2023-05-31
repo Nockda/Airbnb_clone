@@ -9,6 +9,7 @@ import {
   MenuItem,
   MenuList,
   Stack,
+  ToastId,
   useColorMode,
   useColorModeValue,
   useDisclosure,
@@ -17,11 +18,12 @@ import {
 import { FaAirbnb, FaMoon, FaSun } from "react-icons/fa";
 import LoginModal from "./LoginModal";
 import SignUpModal from "./SignUpModal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useUser from "../lib/useUser";
 import { logout } from "../api";
 import { setTimeout } from "timers/promises";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRef } from "react";
 
 export default function Header() {
   const { userLoading, isLoggedIn, user } = useUser();
@@ -39,21 +41,33 @@ export default function Header() {
   const { toggleColorMode } = useColorMode();
   const toast = useToast();
   const QueryClient = useQueryClient();
+  const navigate = useNavigate();
+  const toastId = useRef<ToastId>();
+  const mutation = useMutation(logout, {
+    onMutate: () => {
+      toastId.current = toast({
+        position: "bottom-right",
+        title: "Login out...",
+        description: "Sad to see you go...",
+        status: "loading",
+      });
+    },
+    onSuccess: () => {
+      if (toastId.current) {
+        QueryClient.refetchQueries(["me"]);
+        toast.update(toastId.current, {
+          status: "success",
+          title: "Done!",
+          description: "See you later!",
+        });
+        QueryClient.refetchQueries(["me"]);
+        QueryClient.refetchQueries(["rooms"]);
+        navigate("/");
+      }
+    },
+  });
   const onLogout = async () => {
-    const toastId = toast({
-      position: "bottom-right",
-      title: "Login out...",
-      description: "Sad to see you go...",
-      status: "loading",
-    });
-
-    const data = await logout();
-    QueryClient.refetchQueries(["me"]);
-    toast.update(toastId, {
-      status: "success",
-      title: "done",
-      description: "see you later!",
-    });
+    mutation.mutate();
   };
   return (
     <Stack
@@ -96,6 +110,19 @@ export default function Header() {
                 <Avatar name={user.name} src={user.Avatar} size={"md"} />
               </MenuButton>
               <MenuList>
+                {user?.is_host ? (
+                  <>
+                    <Link to="/manage-bookings">
+                      <MenuItem>Manage bookings</MenuItem>
+                    </Link>
+                    <Link to="/rooms/upload">
+                      <MenuItem>Upload room</MenuItem>
+                    </Link>
+                  </>
+                ) : null}
+                <Link to="/mybookings">
+                  <MenuItem>My bookings</MenuItem>
+                </Link>
                 <MenuItem onClick={onLogout}>Logout</MenuItem>
               </MenuList>
             </Menu>
