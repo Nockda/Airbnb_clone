@@ -14,6 +14,8 @@ import {
   useColorModeValue,
   useDisclosure,
   useToast,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
 import { FaAirbnb, FaMoon, FaSun } from "react-icons/fa";
 import LoginModal from "./LoginModal";
@@ -84,7 +86,12 @@ export default function Header() {
     >
       <Box color={"red.400"}>
         <Link to={"/"}>
-          <FaAirbnb size={"48"} />
+          <HStack alignItems={"flex-start"}>
+            <FaAirbnb size={"48"} />
+            <Text as="b" fontSize={"3xl"}>
+              HS's Airbnb
+            </Text>
+          </HStack>
         </Link>
       </Box>
       <HStack spacing={"2"}>

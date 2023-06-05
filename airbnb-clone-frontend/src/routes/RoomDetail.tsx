@@ -87,7 +87,7 @@ export default function RoomDetail() {
       <Helmet>
         <title>{data ? data.name : "Loading..."}</title>
       </Helmet>
-      <Skeleton height={"43px"} width="25%" isLoaded={!isLoading}>
+      <Skeleton height={"43px"} isLoaded={!isLoading}>
         <Heading>{data?.name}</Heading>
       </Skeleton>
       <Grid
@@ -158,7 +158,7 @@ export default function RoomDetail() {
               </HStack>
             </Heading>
             <Container mt={16} maxW="container.lg" marginX="none">
-              <Grid gap={10} templateColumns={"1fr 1fr"}>
+              <Grid gap={10} templateColumns={"2fr 2fr"}>
                 {reviewsData?.map((review, index) => (
                   <VStack alignItems={"flex-start"} key={index}>
                     <HStack>

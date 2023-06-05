@@ -56,7 +56,14 @@ export default function Room({
           rounded="2xl"
         >
           {imageUrl ? (
-            <Image objectFit={"cover"} minH="280" src={imageUrl} />
+            <Image
+              objectFit={"cover"}
+              boxSize="290"
+              fit={"fill"}
+              minH="280"
+              maxH="280"
+              src={imageUrl}
+            />
           ) : (
             <Box minH="280px" h="100%" w="100%" p={10} bg="green.400" />
           )}
@@ -85,7 +92,15 @@ export default function Room({
               </Button>
             </Box>
           ) : (
-            <FaRegHeart size="20px" />
+            <Button
+              variant={"unstyled"}
+              position={"absolute"}
+              top={0}
+              right={0}
+              color="white"
+            >
+              <FaRegHeart size="20px" />
+            </Button>
           )}
         </Box>
         <Box>
@@ -93,7 +108,6 @@ export default function Room({
             <Text display={"block"} as="b" noOfLines={1} fontSize="md">
               {name}
             </Text>
-
             <HStack spacing={1} alignItems="center">
               <FaStar size={12} />
               <Text fontSize={"sm"}>{rating}</Text>
