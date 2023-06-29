@@ -1,13 +1,14 @@
 # Airbnb_clone
 
-# using Technique
+
+### using Technique
 - Python
 - JavaScript
 - Django
 - RestAPI
 - Poetry
 
-# How to run
+### How to run
 This program built on poetry virtual environment.
 So if you want to run this program you should install poetry first
 
